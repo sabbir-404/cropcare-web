@@ -28,21 +28,6 @@ Status
 - Other: JavaScript, CSS, HTML
 - Recommended: Node.js 16+
 
-## Roles
-### Admin
-![Admin](https://img.shields.io/badge/Admin-%F0%9F%91%91-blue?style=for-the-badge)
-
-### Farmer
-![Farmer](https://img.shields.io/badge/Farmer-%F0%9F%8C%BE-green?style=for-the-badge)
-
-### Agronomist
-![Agronomist](https://img.shields.io/badge/Agronomist-%F0%9F%8C%9E-lightgreen?style=for-the-badge)
-
-### Field Technician
-![Field Technician](https://img.shields.io/badge/Field_Technician-%F0%9F%9A%A7-orange?style=for-the-badge)
-
-### Data / ML Engineer
-![ML](https://img.shields.io/badge/ML_Engineer-%F0%9F%A4%96-purple?style=for-the-badge)
 
 ## Quick start
 ```bash
