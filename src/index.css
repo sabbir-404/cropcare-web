@@ -1,1 +1,35 @@
 @import "tailwindcss";
+
+/* --- Custom global colors --- */
+body {
+  @apply bg-[#F9F7F3] text-[#333333];
+}
+
+section, main, nav, footer {
+  background-color: #F9F7F3;
+}
+
+/* Card style */
+.card {
+  background-color: #F1EDE8;
+  border: 1px solid #DAD7CD;
+  border-radius: 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+/* Button styles override */
+.btn-primary {
+  background-color: #4CAF50;
+  color: white;
+}
+.btn-primary:hover {
+  background-color: #43A047;
+}
+
+.btn-secondary {
+  background-color: #F7B267;
+  color: #333333;
+}
+.btn-secondary:hover {
+  background-color: #F79D56;
+}
