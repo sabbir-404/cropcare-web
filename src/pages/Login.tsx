@@ -5,6 +5,7 @@ import { useNavigate, Navigate } from "react-router-dom";
 import { useState } from "react";
 
 export default function Login(){
+/* The code snippet  provided is a React functional component for a login page. */
   if (isAuthed()) return <Navigate to="/dashboard" replace />;
   const nav = useNavigate();
   const [email,setEmail] = useState("");
