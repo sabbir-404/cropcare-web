@@ -1,73 +1,54 @@
-# React + TypeScript + Vite
+# $CropCare Web $
+### CropCare — Crop monitoring & treatment 🚜🌱
+[![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)](https://opensource.org/licenses/MIT)  
+![TypeScript](https://img.shields.io/badge/TypeScript-TS-blue.svg) ![Node](https://img.shields.io/badge/Node-16%2B-brightgreen) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)  
+![Project Status](https://img.shields.io/badge/status-Active%20(Alpha)-orange)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Short description
+- Lightweight TypeScript frontend for monitoring crop health, estimating severity, and delivering treatment suggestions. Frontend-focused; connects to ML and weather services.
 
-Currently, two official plugins are available:
+Status
+- Development: Active (Alpha) — core features in progress; not production-ready.  
+- Last updated: 2025-10-19
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
+- Leaf Image Capture
+- Treatment & Prevention Suggestions
+- Severity Level Estimation
+- Weather-based Alerts
+- Explainable AI Visualization
+- Geolocation Tagging
 
-## React Compiler
+## Tech Stack
+![TypeScript](https://img.shields.io/badge/TypeScript-89.6%25-blue)
+![JavaScript](https://img.shields.io/badge/JavaScript-4.3%25-yellow)
+![CSS](https://img.shields.io/badge/CSS-3.9%25-blueviolet)
+![HTML](https://img.shields.io/badge/HTML-2.2%25-orange)
+- Primary: TypeScript
+- Other: JavaScript, CSS, HTML
+- Recommended: Node.js 16+
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Roles
+### Admin
+![Admin](https://img.shields.io/badge/Admin-%F0%9F%91%91-blue?style=for-the-badge)
 
-## Expanding the ESLint configuration
+### Farmer
+![Farmer](https://img.shields.io/badge/Farmer-%F0%9F%8C%BE-green?style=for-the-badge)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Agronomist
+![Agronomist](https://img.shields.io/badge/Agronomist-%F0%9F%8C%9E-lightgreen?style=for-the-badge)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Field Technician
+![Field Technician](https://img.shields.io/badge/Field_Technician-%F0%9F%9A%A7-orange?style=for-the-badge)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Data / ML Engineer
+![ML](https://img.shields.io/badge/ML_Engineer-%F0%9F%A4%96-purple?style=for-the-badge)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Quick start
+```bash
+git clone https://github.com/sabbir-404/cropcare-web.git
+cd cropcare-web
+npm install        # or yarn / pnpm
+npm run dev        # replace with your framework's dev command if different
 ```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Open http://localhost:3000 (or port shown by your dev server).
