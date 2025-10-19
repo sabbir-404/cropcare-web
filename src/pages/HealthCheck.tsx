@@ -24,6 +24,18 @@ export default function HealthCheck(){
     setPreview(URL.createObjectURL(f));
   }
 
+/**
+ * The function `explainFromResult` takes an `InferResponse` object and returns a message based on the
+ * label and severity_band properties, providing guidance on plant health conditions.
+ * 
+ * @param r The function `explainFromResult` takes an `InferResponse` object as a parameter. The object
+ * has two properties: `label` and `severity_band`. The `label` property represents the base label of
+ * the response, which can be one of the following values: "healthy", "bl
+ * @return The function `explainFromResult` takes an `InferResponse` object as input and returns a
+ * string based on the properties of the input object. It maps the `label` and `severity_band`
+ * properties of the input object to corresponding messages in the `m` object. If the `label` property
+ * matches one of the keys in the `m` object, it returns the corresponding message along
+ */
   function explainFromResult(r: InferResponse) {
     // Simple local mapping (replace with backend text if available)
     const base = r.label;
