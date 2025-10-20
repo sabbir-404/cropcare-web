@@ -6,7 +6,7 @@ import Nav from "../components/Layout/Nav";
 // import { motion } from "framer-motion";
 
 export default function Signup() {
-  if (isAuthed()) return <Navigate to="/dashboard" replace />;
+  
 
   const nav = useNavigate();
   const [form, setForm] = useState({
@@ -20,7 +20,7 @@ export default function Signup() {
     zip: "",
   });
   const [err, setErr] = useState("");
-
+  if (isAuthed()) return <Navigate to="/dashboard" replace />;
   function update<K extends keyof typeof form>(k: K, v: (typeof form)[K]) {
     setForm((f) => ({ ...f, [k]: v }));
   }

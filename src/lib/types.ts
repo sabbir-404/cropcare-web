@@ -16,3 +16,10 @@ export type InferResponse = {
   lat?: number; lon?: number;
   suggestions?: Suggestion[];
 };
+
+export type Me = {
+  name: string;
+  avatar_url?: string; // absolute or /public path
+};
+
+export type Detection = InferResponse; // reuse your existing shape

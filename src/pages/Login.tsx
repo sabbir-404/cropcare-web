@@ -4,12 +4,12 @@ import { isAuthed, setToken } from "../lib/auth";
 import Nav from "../components/Layout/Nav";
 
 export default function Login() {
-  if (isAuthed()) return <Navigate to="/dashboard" replace />;
 
   const nav = useNavigate();
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [err, setErr] = useState("");
+  if (isAuthed()) return <Navigate to="/dashboard" replace />;
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
