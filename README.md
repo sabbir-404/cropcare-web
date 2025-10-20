@@ -1,7 +1,6 @@
 # $CropCare Web $
 ### CropCare — Crop monitoring & treatment 🚜🌱
-[![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)](https://opensource.org/licenses/MIT)  
-![TypeScript](https://img.shields.io/badge/TypeScript-TS-blue.svg) ![Node](https://img.shields.io/badge/Node-16%2B-brightgreen) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)  
+[![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)](https://opensource.org/licenses/MIT)   
 ![Project Status](https://img.shields.io/badge/status-Active%20(Alpha)-orange)
 
 Short description
