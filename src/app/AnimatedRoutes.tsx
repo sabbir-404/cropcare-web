@@ -10,6 +10,7 @@ import HealthCheck from "../pages/HealthCheck";
 import MapPage from "../pages/MapPage";
 import History from "../pages/History";
 import { isAuthed } from "../lib/auth";
+import type { JSX } from "react";
 
 function Protected({ children }: { children: JSX.Element }) {
   return isAuthed() ? children : <Navigate to="/login" replace />;

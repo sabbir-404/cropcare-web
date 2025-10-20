@@ -29,7 +29,7 @@ export default function Login() {
       <section className="min-h-[calc(100vh-56px)] flex items-center justify-center bg-[#F9F7F3] px-4">
         <div className="w-full max-w-md rounded-2xl border bg-[#F1EDE8] p-6 shadow">
           <div className="flex flex-col items-center text-center">
-            <img src="/logo.png" alt="Smart CropCare logo" className="h-12 w-12 object-contain mb-2" />
+            <img src="/Image/logo.png" alt="Smart CropCare logo" className="h-50 w-50 object-contain mb-2" />
             <h1 className="text-2xl font-bold">Welcome back</h1>
             <p className="text-sm text-gray-600">Log in to continue</p>
           </div>
