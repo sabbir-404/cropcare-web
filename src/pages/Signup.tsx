@@ -44,10 +44,6 @@ export default function Signup() {
       <section className="min-h-[calc(100vh-56px)] grid md:grid-cols-2">
         {/* Left: full-bleed image + overlay text */}
         <div className="hidden md:block relative">
-          {/* Use ONE of these src values depending on where you saved the image */}
-          {/* If placed at public/signup-hero.jpg: */}
-          {/* <img src="/signup-hero.jpg" alt="Farmer field / crop health" className="absolute inset-0 h-full w-full object-cover" /> */}
-          {/* If placed at public/Image/Hero/hero1.jpg: */}
           <img
             src="/Image/Hero/hero1.jpg"
             alt="Farmer field / crop health"
