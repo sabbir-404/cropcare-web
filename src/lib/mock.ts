@@ -129,3 +129,66 @@ export async function mockGetTips(): Promise<{ tips: string[] }> {
     ],
   };
 }
+
+import type { Weather } from "./api";
+import type { RegionalAlert } from "./api";
+
+export async function mockRegionalAlerts(): Promise<RegionalAlert[]> {
+  await new Promise(r => setTimeout(r, 180));
+  return [
+    {
+      region: "Dhaka",
+      center: { lat: 23.7806, lon: 90.4070 },
+      radius_m: 7000,
+      top_disease: "blight",
+      severity: "high",
+      summary: "Increased blight reports clustered near northern fields.",
+      tips: [
+        "Avoid late-day overhead irrigation",
+        "Prune hotspots; bag and discard",
+        "Consider protectant sprays per local guidance"
+      ]
+    },
+    {
+      region: "Gazipur",
+      polygon: [
+        [23.995, 90.38],
+        [24.015, 90.42],
+        [24.000, 90.50],
+        [23.970, 90.46],
+      ],
+      center: { lat: 24.0, lon: 90.44 },
+      top_disease: "mildew",
+      severity: "medium",
+      summary: "Favorable humidity for mildew, scattered cases.",
+      tips: [
+        "Increase spacing / airflow",
+        "Scout undersides of leaves",
+        "Avoid overhead irrigation late"
+      ]
+    }
+  ];
+}
+
+export async function mockGetWeather(lat: number, lon: number): Promise<Weather> {
+  await new Promise(r => setTimeout(r, 140));
+  // simple synthetic weather
+  return {
+    lat, lon,
+    temp_c: 31.2,
+    humidity: 72,
+    wind_ms: 3.4,
+    uv_index: 9.1,      // high UV
+    rain_mm: 2.5,
+    clouds_pct: 45,
+  };
+}
+
+import type { AirQuality } from "./api";
+
+export async function mockGetAirQuality(lat: number, lon: number): Promise<AirQuality> {
+  await new Promise(r => setTimeout(r, 120));
+  // simple synthetic AQI
+  const aqi = 65; // Moderate
+  return { aqi, category: aqi <= 50 ? "Good" : aqi <= 100 ? "Moderate" : "Unhealthy for SG", pm25: 22.4, pm10: 41.3, o3: 32 };
+}

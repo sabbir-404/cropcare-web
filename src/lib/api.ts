@@ -74,3 +74,40 @@ export async function listDetections(params?: {
   const { data } = await http.get("/api/detections", { params });
   return data as InferResponse[];
 }
+export type Weather = {
+  lat: number; lon: number;
+  temp_c: number; humidity: number; wind_ms: number;
+  uv_index: number; rain_mm?: number; clouds_pct?: number;
+};
+
+export type RegionalAlert = {
+  region: string;                  // e.g., "Dhaka"
+  polygon?: [number, number][];    // optional polygon [lat, lon] list
+  center: { lat: number; lon: number };
+  radius_m?: number;               // optional circle radius
+  top_disease: string;             // e.g., "blight"
+  severity: "low" | "medium" | "high";
+  summary: string;
+  tips: string[];
+};
+
+export async function getRegionalAlerts(): Promise<RegionalAlert[]> {
+  const { data } = await http.get("/api/alerts");
+  return data as RegionalAlert[];
+}
+
+export async function getWeather(lat: number, lon: number): Promise<Weather> {
+  const { data } = await http.get("/api/weather", { params: { lat, lon } });
+  return data as Weather;
+}
+
+export type AirQuality = {
+  aqi: number;              // 0–500 (EPA style) or 1–5 (EU) — your backend should normalize to 0–500
+  category: "Good" | "Moderate" | "Unhealthy for SG" | "Unhealthy" | "Very Unhealthy" | "Hazardous";
+  pm25?: number; pm10?: number; o3?: number; no2?: number; so2?: number; co?: number;
+};
+
+export async function getAirQuality(lat: number, lon: number): Promise<AirQuality> {
+  const { data } = await http.get("/api/air", { params: { lat, lon } });
+  return data as AirQuality;
+}
