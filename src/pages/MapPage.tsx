@@ -1,9 +1,9 @@
-import L, { LatLngExpression, DivIcon } from "leaflet";
+import L from "leaflet";
+// import type { LatLngExpression, DivIcon } from "leaflet";
 import { useEffect, useMemo, useState } from "react";
 import Nav from "../components/Layout/Nav";
 import Container from "../components/Layout/Container";
 import { MapContainer, TileLayer, Circle, Polygon, Popup, useMap, Marker } from "react-leaflet";
-import L from "leaflet";
 import { useQuery } from "@tanstack/react-query";
 import { USE_MOCK } from "../lib/api";
 import { getRegionalAlerts, getWeather, getAirQuality } from "../lib/api";
@@ -126,7 +126,7 @@ export default function MapPage() {
                   attribution='&copy; OpenStreetMap'
                 />
 
-                {(selected || myLoc) && <FitTo center={selected?.center ?? (myLoc as any)} />}
+                {(selected || myLoc) && <FitTo center={selected?.center ?? (myLoc as { lat: number; lon: number; acc?: number })} />}
 
                 {/* Current user location */}
                 {myLoc && (
@@ -258,7 +258,7 @@ export default function MapPage() {
                     }`}>
                       <div className="font-semibold capitalize">Crop risk: {risk?.level ?? "low"}</div>
                       <ul className="mt-1 list-disc ml-5">
-                        {risk?.notes.map((n, i) => <li key={i}>{n}</li>)}
+                        {risk?.notes?.map((n, i) => <li key={i}>{n}</li>)}
                       </ul>
                     </div>
                   )}
