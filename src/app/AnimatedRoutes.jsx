@@ -10,12 +10,10 @@ import HealthCheck from "../pages/HealthCheck";
 import MapPage from "../pages/MapPage";
 import History from "../pages/History";
 import { isAuthed } from "../lib/auth";
-import type { JSX } from "react";
 
-function Protected({ children }: { children: JSX.Element }) {
+function Protected({ children }) {
   return isAuthed() ? children : <Navigate to="/login" replace />;
 }
-
 const variants = {
   initial: { opacity: 0, y: 10 },
   animate: { opacity: 1, y: 0 },
