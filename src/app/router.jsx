@@ -10,7 +10,7 @@ import History from "../pages/History";
 import { isAuthed } from "../lib/auth";
 
 // minimal guard
-function Protected({ children }: { children: JSX.Element }) {
+function Protected({ children }) {
   return isAuthed() ? children : <Navigate to="/login" replace />;
 }
 

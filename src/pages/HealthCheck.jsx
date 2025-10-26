@@ -8,36 +8,23 @@ import ResultCard from "../components/Results/ResultCard";
 import SuggestionsList from "../components/Results/SuggestionsList";
 import { inferImage, ping, USE_MOCK } from "../lib/api";
 import { mockInfer, mockPing } from "../lib/mock";
-import type { InferResponse } from "../lib/types";
 
 export default function HealthCheck(){
   const [status,setStatus] = useState("Ready");
-  const [preview,setPreview] = useState<string>();
-  const [file,setFile] = useState<File>();
-  const [geo,setGeo] = useState<{lat?:number;lon?:number}>({});
+  const [preview,setPreview] = useState();
+  const [file,setFile] = useState();
+  const [geo,setGeo] = useState({}); // {lat, lon}
   const [form,setForm] = useState({ plantName:"", crop:"", variety:"", notes:"" });
-  const [res,setRes] = useState<InferResponse>();
-  const [explain,setExplain] = useState<string>("");
+  const [res,setRes] = useState();
+  const [explain,setExplain] = useState("");
 
-  function onPick(f: File){
+  function onPick(f){
     setFile(f);
     setPreview(URL.createObjectURL(f));
   }
 
-/**
- * The function `explainFromResult` takes an `InferResponse` object and returns a message based on the
- * label and severity_band properties, providing guidance on plant health conditions.
- * 
- * @param r The function `explainFromResult` takes an `InferResponse` object as a parameter. The object
- * has two properties: `label` and `severity_band`. The `label` property represents the base label of
- * the response, which can be one of the following values: "healthy", "bl
- * @return The function `explainFromResult` takes an `InferResponse` object as input and returns a
- * string based on the properties of the input object. It maps the `label` and `severity_band`
- * properties of the input object to corresponding messages in the `m` object. If the `label` property
- * matches one of the keys in the `m` object, it returns the corresponding message along
- */
-  function explainFromResult(r: InferResponse) {
-    // Simple local mapping (replace with backend text if available)
+  // Local explanation helper based on result label/severity.
+  function explainFromResult(r) {
     const base = r.label;
     const sev = r.severity_band;
     const m = {
@@ -45,8 +32,8 @@ export default function HealthCheck(){
       blight: "Lesions suggest blight; early removal of hotspots and canopy airflow can slow spread.",
       rust: "Orange/brown pustules are consistent with rust; dry foliage reduces infection cycles.",
       mildew: "Powdery patches suggest mildew; reduce humidity, improve spacing, and scout adjacent plants."
-    } as const;
-    return `${m[base as keyof typeof m] ?? "Signs indicate stress or disease."} Severity is ${sev}.`;
+    };
+    return `${m[base] ?? "Signs indicate stress or disease."} Severity is ${sev}.`;
   }
 
   async function testBackend(){
@@ -86,7 +73,6 @@ export default function HealthCheck(){
           <div className="space-y-4">
             <div className="rounded-2xl border p-4">
               <div className="text-sm font-medium mb-2">Capture or upload</div>
-              {/* For mobile cameras, accept + capture helps; for desktop you’ll pick a file */}
               <input type="file" accept="image/*" capture="environment"
                      onChange={e => e.target.files?.[0] && onPick(e.target.files[0])}/>
               <div className="mt-2 text-xs text-gray-500">Tip: On mobile, this opens the camera.</div>

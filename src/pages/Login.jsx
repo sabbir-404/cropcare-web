@@ -4,14 +4,14 @@ import { isAuthed, setToken } from "../lib/auth";
 import Nav from "../components/Layout/Nav";
 
 export default function Login() {
-
   const nav = useNavigate();
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [err, setErr] = useState("");
+
   if (isAuthed()) return <Navigate to="/dashboard" replace />;
 
-  async function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e) {
     e.preventDefault();
     setErr("");
     // TODO: replace with real backend /auth/login

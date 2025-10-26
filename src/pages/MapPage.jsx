@@ -1,5 +1,4 @@
 import L from "leaflet";
-// import type { LatLngExpression, DivIcon } from "leaflet";
 import { useEffect, useMemo, useState } from "react";
 import Nav from "../components/Layout/Nav";
 import Container from "../components/Layout/Container";
@@ -8,8 +7,6 @@ import { useQuery } from "@tanstack/react-query";
 import { USE_MOCK } from "../lib/api";
 import { getRegionalAlerts, getWeather, getAirQuality } from "../lib/api";
 import { mockRegionalAlerts, mockGetWeather, mockGetAirQuality } from "../lib/mock";
-import type { RegionalAlert, Weather } from "../lib/api";
-import type { AirQuality } from "../lib/api";
 import { riskFromWeather } from "../lib/risk";
 
 // fix Leaflet default icon in bundlers (use public/leaflet/ assets or CDN)
@@ -22,7 +19,7 @@ const UserIcon = L.divIcon({
 
 const mapH = "h-[70vh]";
 
-function FitTo({ center }: { center: { lat: number; lon: number } }) {
+function FitTo({ center }) {
   const map = useMap();
   useEffect(() => {
     map.setView([center.lat, center.lon], 11);
@@ -30,7 +27,7 @@ function FitTo({ center }: { center: { lat: number; lon: number } }) {
   return null;
 }
 
-const sevColor: Record<"low"|"medium"|"high", string> = {
+const sevColor = {
   low: "#10b98188",
   medium: "#f59e0b88",
   high: "#ef444488",
@@ -38,17 +35,17 @@ const sevColor: Record<"low"|"medium"|"high", string> = {
 
 export default function MapPage() {
   // regional overlays
-  const { data: alerts = [] } = useQuery<RegionalAlert[]>({
+  const { data: alerts = [] } = useQuery({
     queryKey: ["alerts"],
     queryFn: () => (USE_MOCK ? mockRegionalAlerts() : getRegionalAlerts()),
   });
 
   // selected region from overlays
-  const [selected, setSelected] = useState<RegionalAlert | null>(null);
+  const [selected, setSelected] = useState(null);
 
   // user geolocation
-  const [myLoc, setMyLoc] = useState<{ lat: number; lon: number; acc?: number } | null>(null);
-  const [geoErr, setGeoErr] = useState<string>("");
+  const [myLoc, setMyLoc] = useState(null);
+  const [geoErr, setGeoErr] = useState("");
 
   function useMyLocation() {
     if (!navigator.geolocation) {
@@ -70,7 +67,7 @@ export default function MapPage() {
   const condTarget = selected?.center ?? myLoc ?? null;
 
   // fetch weather + aqi for condTarget
-  const { data: weather } = useQuery<Weather | undefined>({
+  const { data: weather } = useQuery({
     queryKey: ["weather", condTarget?.lat, condTarget?.lon],
     enabled: Boolean(condTarget),
     queryFn: () =>
@@ -81,7 +78,7 @@ export default function MapPage() {
         : Promise.resolve(undefined),
   });
 
-  const { data: aqi } = useQuery<AirQuality | undefined>({
+  const { data: aqi } = useQuery({
     queryKey: ["aqi", condTarget?.lat, condTarget?.lon],
     enabled: Boolean(condTarget),
     queryFn: () =>
@@ -95,9 +92,10 @@ export default function MapPage() {
   const risk = useMemo(() => (weather ? riskFromWeather(weather) : undefined), [weather]);
 
   // initial center
-  const mapCenter = selected?.center
-    ?? myLoc
-    ?? { lat: alerts[0]?.center.lat ?? 23.78, lon: alerts[0]?.center.lon ?? 90.41 };
+  const mapCenter =
+    selected?.center ??
+    myLoc ??
+    { lat: alerts[0]?.center?.lat ?? 23.78, lon: alerts[0]?.center?.lon ?? 90.41 };
 
   return (
     <>
@@ -123,10 +121,12 @@ export default function MapPage() {
               <MapContainer center={[mapCenter.lat, mapCenter.lon]} zoom={10} className="h-full w-full">
                 <TileLayer
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  attribution='&copy; OpenStreetMap'
+                  attribution="&copy; OpenStreetMap"
                 />
 
-                {(selected || myLoc) && <FitTo center={selected?.center ?? (myLoc as { lat: number; lon: number; acc?: number })} />}
+                {(selected || myLoc) && (
+                  <FitTo center={selected?.center ?? myLoc} />
+                )}
 
                 {/* Current user location */}
                 {myLoc && (
