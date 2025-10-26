@@ -1,25 +1,27 @@
-export type Suggestion = {
-  title: string;
-  category: "immediate" | "preventive";
-  content_md: string;
-  rank: number;
-};
-
-export type InferResponse = {
-  id: string;
-  label: string;
-  confidence: number;        // 0..1
-  severity_percent: number;  // 0..100
-  severity_band: "low" | "medium" | "high";
-  gradcam_url?: string;
-  captured_at: string;       // ISO
-  lat?: number; lon?: number;
-  suggestions?: Suggestion[];
-};
-
-export type Me = {
-  name: string;
-  avatar_url?: string; // absolute or /public path
-};
-
-export type Detection = InferResponse; // reuse your existing shape
+/**
+ * @typedef {"immediate"|"preventive"} SuggestionCategory
+ *
+ * @typedef {Object} Suggestion
+ * @property {string} title
+ * @property {SuggestionCategory} category
+ * @property {string} content_md
+ * @property {number} rank
+ *
+ * @typedef {Object} InferResponse
+ * @property {string} id
+ * @property {string} label
+ * @property {number} confidence      // 0..1
+ * @property {number} severity_percent // 0..100
+ * @property {"low"|"medium"|"high"} severity_band
+ * @property {string=} gradcam_url
+ * @property {string} captured_at     // ISO
+ * @property {number=} lat
+ * @property {number=} lon
+ * @property {Suggestion[]=} suggestions
+ *
+ * @typedef {Object} Me
+ * @property {string} name
+ * @property {string=} avatar_url
+ *
+ * @typedef {InferResponse} Detection
+ */
