@@ -5,7 +5,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { USE_MOCK } from "../lib/api";
 import { listDetections, getMe, getTips, updateMeProfile } from "../lib/api";
 import { mockListDetections, mockMe, mockGetTips, mockUpdateMeProfile } from "../lib/mock";
-import type { Detection, Me } from "../lib/types";
 import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, Legend,
 } from "recharts";
@@ -23,53 +22,60 @@ const COLORS = {
   border: "#DAD7CD",
 };
 
-export default function Dashboard(){
+export default function Dashboard() {
   const qc = useQueryClient();
 
   // data queries
-  const { data: me } = useQuery<Me>({ queryKey:["me"], queryFn: ()=> USE_MOCK ? mockMe() : getMe() });
-  const { data: detections = [] } = useQuery<Detection[]>({
-    queryKey:["detections"],
-    queryFn: ()=> USE_MOCK ? mockListDetections() : listDetections({ limit: 500 }),
+  const { data: me } = useQuery({
+    queryKey: ["me"],
+    queryFn: () => (USE_MOCK ? mockMe() : getMe()),
   });
-  const { data: tipsData } = useQuery<{tips:string[]}>({
-    queryKey:["tips"],
-    queryFn: ()=> USE_MOCK ? mockGetTips() : getTips(),
+
+  const { data: detections = [] } = useQuery({
+    queryKey: ["detections"],
+    queryFn: () => (USE_MOCK ? mockListDetections() : listDetections({ limit: 500 })),
+  });
+
+  const { data: tipsData } = useQuery({
+    queryKey: ["tips"],
+    queryFn: () => (USE_MOCK ? mockGetTips() : getTips()),
   });
 
   // edit profile modal
   const [openEdit, setOpenEdit] = useState(false);
 
-  async function saveProfile(payload: { name?: string; avatarFile?: File }) {
+  // If you want editor hints without TS, you can add JSDoc:
+  /** @param {{ name?: string, avatarFile?: File }} payload */
+  async function saveProfile(payload) {
     const next = USE_MOCK ? await mockUpdateMeProfile(payload) : await updateMeProfile(payload);
     // update cache so UI refreshes
     qc.setQueryData(["me"], next);
   }
 
   // charts data
-  const byDay = useMemo(()=>{
-    const map = new Map<string, number>();
+  const byDay = useMemo(() => {
+    const map = new Map();
     for (const r of detections) {
-      const key = new Date(r.captured_at).toISOString().slice(0,10);
+      const key = new Date(r.captured_at).toISOString().slice(0, 10);
       map.set(key, (map.get(key) ?? 0) + 1);
     }
     const now = new Date();
-    const out: { day: string; scans: number }[] = [];
-    for (let i=13;i>=0;i--){
-      const d = new Date(now.getTime() - i*24*60*60*1000);
-      const key = d.toISOString().slice(0,10);
+    const out = [];
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+      const key = d.toISOString().slice(0, 10);
       out.push({ day: key.slice(5), scans: map.get(key) ?? 0 });
     }
     return out;
   }, [detections]);
 
-  const pie = useMemo(()=>{
-    const counts = { low:0, medium:0, high:0 };
-    for (const r of detections) counts[r.severity_band as "low"|"medium"|"high"]++;
+  const pie = useMemo(() => {
+    const counts = { low: 0, medium: 0, high: 0 };
+    for (const r of detections) counts[r.severity_band] = (counts[r.severity_band] ?? 0) + 1;
     return [
-      { name:"Low", value: counts.low, color: COLORS.emerald },
-      { name:"Medium", value: counts.medium, color: COLORS.amber },
-      { name:"High", value: counts.high, color: COLORS.rose },
+      { name: "Low", value: counts.low, color: COLORS.emerald },
+      { name: "Medium", value: counts.medium, color: COLORS.amber },
+      { name: "High", value: counts.high, color: COLORS.rose },
     ];
   }, [detections]);
 
@@ -107,25 +113,43 @@ export default function Dashboard(){
 
         {/* KPIs */}
         <div className="grid sm:grid-cols-3 gap-4">
-          <div className="rounded-2xl border p-4 shadow-sm" style={{background: COLORS.cream, borderColor: COLORS.border}}>
+          <div
+            className="rounded-2xl border p-4 shadow-sm"
+            style={{ background: COLORS.cream, borderColor: COLORS.border }}
+          >
             <div className="text-sm text-gray-600">Total Scans</div>
             <div className="text-3xl font-extrabold">{detections.length}</div>
           </div>
-          <div className="rounded-2xl border p-4 shadow-sm" style={{background: COLORS.cream, borderColor: COLORS.border}}>
+          <div
+            className="rounded-2xl border p-4 shadow-sm"
+            style={{ background: COLORS.cream, borderColor: COLORS.border }}
+          >
             <div className="text-sm text-gray-600">High Severity</div>
-            <div className="text-3xl font-extrabold">{detections.filter(r=>r.severity_band==="high").length}</div>
+            <div className="text-3xl font-extrabold">
+              {detections.filter((r) => r.severity_band === "high").length}
+            </div>
           </div>
-          <div className="rounded-2xl border p-4 shadow-sm" style={{background: COLORS.cream, borderColor: COLORS.border}}>
+          <div
+            className="rounded-2xl border p-4 shadow-sm"
+            style={{ background: COLORS.cream, borderColor: COLORS.border }}
+          >
             <div className="text-sm text-gray-600">Last 7 Days</div>
             <div className="text-3xl font-extrabold">
-              {detections.filter(r=> (Date.now()-new Date(r.captured_at).getTime()) < 7*24*60*60*1000).length}
+              {
+                detections.filter(
+                  (r) => Date.now() - new Date(r.captured_at).getTime() < 7 * 24 * 60 * 60 * 1000
+                ).length
+              }
             </div>
           </div>
         </div>
 
         {/* Charts */}
         <div className="mt-6 grid lg:grid-cols-2 gap-6">
-          <div className="rounded-2xl border p-4 shadow-sm" style={{background: COLORS.cream, borderColor: COLORS.border}}>
+          <div
+            className="rounded-2xl border p-4 shadow-sm"
+            style={{ background: COLORS.cream, borderColor: COLORS.border }}
+          >
             <div className="font-semibold mb-2">Scans by Day (last 14)</div>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
@@ -139,13 +163,18 @@ export default function Dashboard(){
             </div>
           </div>
 
-          <div className="rounded-2xl border p-4 shadow-sm" style={{background: COLORS.cream, borderColor: COLORS.border}}>
+          <div
+            className="rounded-2xl border p-4 shadow-sm"
+            style={{ background: COLORS.cream, borderColor: COLORS.border }}
+          >
             <div className="font-semibold mb-2">Severity Distribution</div>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={pie} dataKey="value" nameKey="name" outerRadius={90} label>
-                    {pie.map((entry, index) => <Cell key={`c-${index}`} fill={entry.color} />)}
+                    {pie.map((entry, index) => (
+                      <Cell key={`c-${index}`} fill={entry.color} />
+                    ))}
                   </Pie>
                   <Legend />
                   <Tooltip />
@@ -156,15 +185,18 @@ export default function Dashboard(){
         </div>
 
         {/* AI Tips */}
-        <div className="mt-6 rounded-2xl border p-4 shadow-sm" style={{background: COLORS.cream, borderColor: COLORS.border}}>
+        <div
+          className="mt-6 rounded-2xl border p-4 shadow-sm"
+          style={{ background: COLORS.cream, borderColor: COLORS.border }}
+        >
           <div className="font-semibold mb-2">AI Tips</div>
           <ul className="space-y-2 text-sm text-gray-700">
-            {(tipsData?.tips ?? []).map((t,i)=>(
-              <li key={i} className="rounded-md bg-white/70 p-2 border" style={{borderColor: COLORS.border}}>
+            {(tipsData?.tips ?? []).map((t, i) => (
+              <li key={i} className="rounded-md bg-white/70 p-2 border" style={{ borderColor: COLORS.border }}>
                 {t}
               </li>
             ))}
-            {(!tipsData?.tips || tipsData.tips.length===0) && (
+            {(!tipsData?.tips || tipsData.tips.length === 0) && (
               <li className="text-gray-500">No tips yet. Run a Health Check to see suggestions.</li>
             )}
           </ul>

@@ -1,12 +1,9 @@
-// src/lib/mock.ts
-import type { InferResponse, Me } from "./types";
-
 // --- helpers / constants ---
-const LABELS = ["healthy", "blight", "rust", "mildew"] as const;
-const SEVERITIES = ["low", "medium", "high"] as const;
+const LABELS = ["healthy", "blight", "rust", "mildew"];
+const SEVERITIES = ["low", "medium", "high"];
 
 // keep an in-memory "me" state for mock mode
-let mockMeState: Me = { name: "Sabbir Ahmed", avatar_url: "/profile.jpg" };
+let mockMeState = { name: "Sabbir Ahmed", avatar_url: "/profile.jpg" };
 
 // optional: reset mocks between tests
 export function __resetMockState() {
@@ -14,13 +11,13 @@ export function __resetMockState() {
 }
 
 // --- connectivity ---
-export async function mockPing(): Promise<{ ok: boolean }> {
+export async function mockPing() {
   await new Promise((r) => setTimeout(r, 200));
   return { ok: true };
 }
 
 // --- inference ---
-export async function mockInfer(_file: File): Promise<InferResponse> {
+export async function mockInfer(_file) {
   await new Promise((r) => setTimeout(r, 800));
 
   const label = LABELS[Math.floor(Math.random() * LABELS.length)];
@@ -28,11 +25,10 @@ export async function mockInfer(_file: File): Promise<InferResponse> {
   const severity_percent =
     severity_band === "low" ? 7.2 : severity_band === "medium" ? 24.9 : 48.3;
 
-  // Ensure /public/mock/gradcam.png exists (or change to undefined)
   const gradcam_url = "/mock/gradcam.png";
 
   return {
-    id: crypto.randomUUID(),
+    id: (crypto && crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
     label,
     confidence: 0.92,
     severity_percent,
@@ -63,46 +59,40 @@ export async function mockInfer(_file: File): Promise<InferResponse> {
 }
 
 // --- profile (me) ---
-export async function mockMe(): Promise<Me> {
+export async function mockMe() {
   await new Promise((r) => setTimeout(r, 100));
   return { ...mockMeState };
 }
 
-export async function mockUpdateMeProfile(payload: {
-  name?: string;
-  avatarFile?: File;
-}): Promise<Me> {
+export async function mockUpdateMeProfile(payload) {
   await new Promise((r) => setTimeout(r, 150));
 
   if (payload.name) mockMeState.name = payload.name;
 
   if (payload.avatarFile) {
-    // We can't actually upload in mock mode; show a blob preview URL.
     const blobUrl = URL.createObjectURL(payload.avatarFile);
     mockMeState.avatar_url = blobUrl;
-    // (Optional) You can revoke previous blob URLs when replacing with a new one.
   }
   return { ...mockMeState };
 }
 
 // --- detections & tips for Dashboard ---
-export async function mockListDetections(): Promise<InferResponse[]> {
+export async function mockListDetections() {
   await new Promise((r) => setTimeout(r, 200));
   const now = Date.now();
 
-  // 24 random detections over ~2–3 weeks
   return Array.from({ length: 24 }, (_, i) => {
     const label = LABELS[Math.floor(Math.random() * LABELS.length)];
     const severity_band = SEVERITIES[Math.floor(Math.random() * SEVERITIES.length)];
     const raw =
       severity_band === "low"
-        ? Math.random() * 10 + 1 // 1–11%
+        ? Math.random() * 10 + 1
         : severity_band === "medium"
-        ? Math.random() * 20 + 15 // 15–35%
-        : Math.random() * 30 + 35; // 35–65%
+        ? Math.random() * 20 + 15
+        : Math.random() * 30 + 35;
 
-    const item: InferResponse = {
-      id: crypto.randomUUID(),
+    return {
+      id: (crypto && crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + i)),
       label,
       confidence: 0.7 + Math.random() * 0.3,
       severity_percent: Math.round(raw),
@@ -115,11 +105,10 @@ export async function mockListDetections(): Promise<InferResponse[]> {
       lon: 90.3 + Math.random() * 0.3,
       suggestions: [],
     };
-    return item;
   });
 }
 
-export async function mockGetTips(): Promise<{ tips: string[] }> {
+export async function mockGetTips() {
   await new Promise((r) => setTimeout(r, 120));
   return {
     tips: [
@@ -130,11 +119,8 @@ export async function mockGetTips(): Promise<{ tips: string[] }> {
   };
 }
 
-import type { Weather } from "./api";
-import type { RegionalAlert } from "./api";
-
-export async function mockRegionalAlerts(): Promise<RegionalAlert[]> {
-  await new Promise(r => setTimeout(r, 180));
+export async function mockRegionalAlerts() {
+  await new Promise((r) => setTimeout(r, 180));
   return [
     {
       region: "Dhaka",
@@ -170,25 +156,21 @@ export async function mockRegionalAlerts(): Promise<RegionalAlert[]> {
   ];
 }
 
-export async function mockGetWeather(lat: number, lon: number): Promise<Weather> {
+export async function mockGetWeather(lat, lon) {
   await new Promise(r => setTimeout(r, 140));
-  // simple synthetic weather
   return {
     lat, lon,
     temp_c: 31.2,
     humidity: 72,
     wind_ms: 3.4,
-    uv_index: 9.1,      // high UV
+    uv_index: 9.1,
     rain_mm: 2.5,
     clouds_pct: 45,
   };
 }
 
-import type { AirQuality } from "./api";
-
-export async function mockGetAirQuality(lat: number, lon: number): Promise<AirQuality> {
+export async function mockGetAirQuality(_lat, _lon) {
   await new Promise(r => setTimeout(r, 120));
-  // simple synthetic AQI
   const aqi = 65; // Moderate
   return { aqi, category: aqi <= 50 ? "Good" : aqi <= 100 ? "Moderate" : "Unhealthy for SG", pm25: 22.4, pm10: 41.3, o3: 32 };
 }

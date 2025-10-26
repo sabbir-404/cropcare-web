@@ -8,14 +8,13 @@ import ResultCard from "../components/Results/ResultCard";
 import SuggestionsList from "../components/Results/SuggestionsList";
 import { inferImage, ping, USE_MOCK } from "../lib/api";
 import { mockInfer, mockPing } from "../lib/mock";
-import type { InferResponse } from "../lib/types";
 
 export default function NewScan(){
   const [status,setStatus] = useState("Ready");
-  const [preview,setPreview] = useState<string>();
-  const [file,setFile] = useState<File>();
-  const [geo,setGeo] = useState<{lat?:number;lon?:number}>({});
-  const [res,setRes] = useState<InferResponse>();
+  const [preview,setPreview] = useState();
+  const [file,setFile] = useState();
+  const [geo,setGeo] = useState({}); // {lat, lon}
+  const [res,setRes] = useState();
 
   async function testBackend(){
     setStatus("Pinging...");

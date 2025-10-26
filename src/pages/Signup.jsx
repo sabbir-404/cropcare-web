@@ -2,12 +2,9 @@ import { useState } from "react";
 import { Navigate, Link, useNavigate } from "react-router-dom";
 import { isAuthed, setToken } from "../lib/auth";
 import Nav from "../components/Layout/Nav";
-// If you want a fade-in for the overlay text, uncomment the next line and the motion.div below
 // import { motion } from "framer-motion";
 
 export default function Signup() {
-  
-
   const nav = useNavigate();
   const [form, setForm] = useState({
     name: "",
@@ -20,12 +17,14 @@ export default function Signup() {
     zip: "",
   });
   const [err, setErr] = useState("");
+
   if (isAuthed()) return <Navigate to="/dashboard" replace />;
-  function update<K extends keyof typeof form>(k: K, v: (typeof form)[K]) {
+
+  function update(k, v) {
     setForm((f) => ({ ...f, [k]: v }));
   }
 
-  async function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e) {
     e.preventDefault();
     setErr("");
     const { name, email, password } = form;
@@ -51,9 +50,6 @@ export default function Signup() {
           />
           <div className="absolute inset-0 bg-black/25" />
           <div className="absolute inset-0 flex items-center">
-            {/* For animated fade-in, wrap with motion.div and uncomment import:
-            <motion.div initial={{opacity:0, y:12}} animate={{opacity:1, y:0}} transition={{duration:0.35, ease:"easeOut"}} className="px-10">
-            */}
             <div className="px-10">
               <h2 className="text-white text-4xl font-extrabold drop-shadow-sm">
                 Join Smart CropCare
@@ -68,7 +64,6 @@ export default function Signup() {
                 <li>• Geotagging & history</li>
               </ul>
             </div>
-            {/* </motion.div> */}
           </div>
         </div>
 
