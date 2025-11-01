@@ -22,3 +22,71 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# ================= Common logs & editors =================
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ================= Frontend (Node/Vite) =================
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# If your frontend is in /frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.env
+
+# ================= Backend (Python/FastAPI) ==============
+# Do NOT commit virtualenvs
+backend/.venv/
+backend/venv/
+
+# Python caches & tooling
+backend/__pycache__/
+backend/*.py[cod]
+backend/.pytest_cache/
+backend/.mypy_cache/
+backend/.ruff_cache/
+backend/.coverage
+backend/.env
+
+# ================= Large artifacts (keep out of git) =====
+# Model/checkpoint/data files — use LFS or external storage
+backend/models/
+backend/checkpoints/
+backend/data/
+
+# Common heavy extensions
+*.dll
+*.pyd
+*.so
+*.pb
+*.h5
+*.hdf5
+*.tflite
+*.onnx
+*.pt
+*.npz
+*.npy
+
+# OS junk (in case)
+Thumbs.db
